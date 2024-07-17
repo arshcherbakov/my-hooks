@@ -11,7 +11,7 @@ const ExampleDebounced = <T,>() => {
   const [usersList, setUsersList] = useState<userType[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
 
-  const { isReady, cancel } = useDebounce(
+  const [isReady, cancel] = useDebounce(
     async () => {
       const response: any = await getUsers(searchInput, 1);
       setUsersList(response.items);
@@ -31,8 +31,6 @@ const ExampleDebounced = <T,>() => {
       <button onClick={cancel}>Отмена</button>
       {usersList &&
         usersList.map((user: userType) => <p key={user.id}>{user.login}</p>)}
-
-      <h1>{isReady}dwdw</h1>
     </div>
   );
 };
