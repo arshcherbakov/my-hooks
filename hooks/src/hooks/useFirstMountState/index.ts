@@ -1,15 +1,15 @@
 import { useEffect, useRef } from "react";
 
 const useFirstMountState = (): boolean => {
-  const isFerstMount = useRef<boolean>(true);
+  const isFirstMount = useRef<boolean>(true);
 
   useEffect(() => {
-    if (isFerstMount.current) {
-      isFerstMount.current = false;
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
     }
   }, []);
 
-  return isFerstMount.current;
+  return isFirstMount.current;
 };
 
 export default useFirstMountState;
