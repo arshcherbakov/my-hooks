@@ -1,40 +1,38 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const useDebounce = <T>(
   fn: () => void,
   ms: number,
   deps: T[]
 ): [boolean | null, () => void] => {
-  const cancelDebounce = useRef<boolean>(false);
   const ready = useRef<boolean | null>(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
 
   const isReady = ready.current;
 
+  const clear = () => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+  };
+
+  const cancel = () => {
+    clear();
+    ready.current = null;
+  };
+
   useEffect(() => {
     ready.current = false;
 
-    if (timer.current) {
-      clearTimeout(timer.current);
-    }
+    clear();
 
-    if (!cancelDebounce.current) {
-      timer.current = setTimeout(() => {
-        ready.current = true;
-        fn();
-      }, ms);
-    }
+    timer.current = setTimeout(() => {
+      ready.current = true;
+      fn();
+    }, ms);
+
+    return cancel;
   }, deps);
-
-  const cancel = () => {
-    cancelDebounce.current = true;
-
-    if (timer.current) {
-      clearTimeout(timer.current);
-    }
-
-    ready.current = null;
-  };
 
   return [isReady, cancel];
 };

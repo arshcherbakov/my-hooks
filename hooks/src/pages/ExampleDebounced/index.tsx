@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { getUsers } from "../../services/user-service";
 import useDebounce from "../../hooks/useDebounce";
 
@@ -7,16 +7,16 @@ type userType = {
   login: string;
 };
 
-const ExampleDebounced = <T,>() => {
+const ExampleDebounced = () => {
   const [usersList, setUsersList] = useState<userType[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
 
-  const [isReady, cancel] = useDebounce(
+  const [, cancel] = useDebounce(
     async () => {
       const response: any = await getUsers(searchInput, 1);
       setUsersList(response.items);
     },
-    2000,
+    1000,
     [searchInput]
   );
 
@@ -26,7 +26,6 @@ const ExampleDebounced = <T,>() => {
 
   return (
     <div className="App">
-      <h1>{isReady}</h1>
       <input onChange={handlInput} />
       <button onClick={cancel}>Отмена</button>
       {usersList &&
