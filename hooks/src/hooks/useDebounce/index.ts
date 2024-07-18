@@ -1,5 +1,11 @@
 import { useEffect, useRef } from "react";
 
+const debounce = (fn: () => void, ms: number) => {
+  return setTimeout(() => {
+    fn();
+  }, ms);
+};
+
 const useDebounce = <T>(
   fn: () => void,
   ms: number,
@@ -26,10 +32,8 @@ const useDebounce = <T>(
 
     clear();
 
-    timer.current = setTimeout(() => {
-      ready.current = true;
-      fn();
-    }, ms);
+    ready.current = true;
+    timer.current = debounce(fn, ms);
 
     return cancel;
   }, deps);
